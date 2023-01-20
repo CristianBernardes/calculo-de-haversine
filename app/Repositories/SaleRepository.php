@@ -160,7 +160,7 @@ class SaleRepository
             ->when($salesman, function ($query, $salesman) {
                 $query->where('users.name', $salesman);
             })->when($startEndDate, function ($q, $startEndDate) {
-                $q->whereBetween('sales.created_at', $startEndDate);
+                $q->whereBetween('sales.date_hour_sale', $startEndDate);
             });
     }
 
