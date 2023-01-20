@@ -45,18 +45,6 @@ class AuthController extends Controller
     }
 
     /**
-     * Log the user out (Invalidate the token).
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function logout()
-    {
-        auth($this->guard)->logout();
-
-        return response()->json(['message' => 'Successfully logged out']);
-    }
-
-    /**
      * Refresh a token.
      *
      * @return \Illuminate\Http\JsonResponse
