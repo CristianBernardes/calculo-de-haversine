@@ -80,7 +80,7 @@ class SaleApiController extends Controller
     }
 
     /**
-     * @param string $saleId
+     * @param InsertSaleRequest $request
      * @return JsonResponse
      */
     public function insertSale(InsertSaleRequest $request): JsonResponse
