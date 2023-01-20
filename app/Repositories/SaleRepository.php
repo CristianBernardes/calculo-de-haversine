@@ -138,7 +138,7 @@ class SaleRepository
             'sales.id AS sale_id',
             'sales.sale_value',
             'users.name AS salesman',
-            DB::raw('COALESCE(sales.unit_name, units.unit_name) AS unit'),
+            DB::raw('COALESCE(sales.unit_name, units.unit_name) AS nearest_unit'),
             'boards.board_name AS board_salesman',
             'sales.latitude',
             'sales.longitude',

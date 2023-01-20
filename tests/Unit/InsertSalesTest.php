@@ -14,7 +14,7 @@ class InsertSalesTest extends TestCase
      *
      * @return void
      */
-    public function testInsertSalesForSpecificUser()
+    public function testInsertSalesForSpecificRoamingTrueUser()
     {
         $user = User::where('email', 'afonso.afancar@magazineaziul.com.br')->first();
 
@@ -28,6 +28,22 @@ class InsertSalesTest extends TestCase
 
         $this->assertFalse($result->roaming === 0);
         $this->assertTrue($result->roaming === 1);
+        $this->assertNotEmpty($result);
+    }
+
+    public function testInsertSalesForSpecificRoamingFalseUser()
+    {
+        $user = User::where('email', 'marcos.vinicius@magazineaziul.com.br')->first();
+
+        $saleRepository = new SaleRepository();
+
+        $result = $saleRepository->insertSale($user, [
+            "latitude" => "-22.923447510604802",
+            "longitude" => "-43.23208495438858",
+            "sale_value" => 800.55
+        ]);
+
+        $this->assertTrue($result->roaming === 0);
         $this->assertNotEmpty($result);
     }
 
