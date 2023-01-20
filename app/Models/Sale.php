@@ -5,7 +5,11 @@ namespace App\Models;
 use App\Models\Traits\Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ *
+ */
 class Sale extends Model
 {
     use HasFactory, Uuids;
@@ -32,16 +36,25 @@ class Sale extends Model
      */
     protected $appends = ['date_of_sale', 'hour_of_sale'];
 
+    /**
+     * @return string
+     */
     public function getDateOfSaleAttribute()
     {
         return formatDateAndTime($this->date_hour_sale, 'Y-m-d');
     }
 
+    /**
+     * @return string
+     */
     public function getHourOfSaleAttribute()
     {
         return formatDateAndTime($this->date_hour_sale, 'H:i');
     }
 
+    /**
+     * @return BelongsTo
+     */
     public function salesman()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');

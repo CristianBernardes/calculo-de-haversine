@@ -22,7 +22,7 @@ class SaleRepository
      * @param string|null $board
      * @param string|null $unit
      * @param string|null $salesman
-     * @param string|null $startEndDate
+     * @param array|null $startEndDate
      * @return array
      */
     public function getSales($authUser, string|null $board, string|null $unit, string|null $salesman, array|null $startEndDate)
@@ -63,6 +63,7 @@ class SaleRepository
                 ->get();
         }
 
+        /** @var TYPE_NAME $aggregatedQuery */
         $aggregatedQuery = fn (string $value) => $this->aggregatedQuery(
             $this->querySale(
                 $salesmans->pluck('id'),

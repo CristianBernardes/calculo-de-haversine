@@ -19,13 +19,14 @@ class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable, Uuids;
 
-    // Rest omitted for brevity
-
     const GENERAL_MANAGER = 'general_manager';
     const DIRECTOR = 'director';
     const MANAGER = 'manager';
     const SALESMAN = 'salesman';
 
+    /**
+     * @return string[]
+     */
     public static function listProfiles()
     {
         return [
@@ -114,6 +115,9 @@ class User extends Authenticatable implements JWTSubject
         return BoardUnitUser::select('board_id', 'unit_id')->where('user_id', $this->id)->first();
     }
 
+    /**
+     * @return null
+     */
     public function getshowSellerCoordinatesAttribute()
     {
         if ($this->profile != 'salesman') {
