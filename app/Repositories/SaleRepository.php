@@ -27,15 +27,18 @@ class SaleRepository
      */
     public function getSales($authUser, string|null $board, string|null $unit, string|null $salesman, array|null $startEndDate)
     {
-        $boards = Board::select('board_name')->get()->pluck('board_name');
-        $units = Unity::select('unit_name')->get()->pluck('unit_name');
-        $salesmans = User::select('id', 'name')->get();
-
         $boardsUnits = $authUser->board_unit;
+
+        if ($authUser->profile === User::GENERAL_MANAGER) {
+
+            $boards = Board::select('board_name')->get()->pluck('board_name');
+            $units = Unity::select('unit_name')->get()->pluck('unit_name');
+            $salesmans = User::select('id', 'name')->get();
+        }
 
         if ($authUser->profile === User::DIRECTOR) {
 
-            $boards = Board::select('board_name')->where('id', $boardsUnits['board_id'])->pluck('board_name');
+            $boards = Board::select('board_name')->where('id', $boardsUnits['board_id'])->get()->pluck('board_name');
             $units = Unity::select('unit_name')->where('board_id', $boardsUnits['board_id'])->get()->pluck('unit_name');
             $salesmans = User::select('users.id', 'users.name')
                 ->join('board_unit_users', 'users.id', 'board_unit_users.user_id')
@@ -45,7 +48,7 @@ class SaleRepository
 
         if ($authUser->profile === User::MANAGER) {
 
-            $boards = Board::select('board_name')->where('id', $boardsUnits['board_id'])->pluck('board_name');
+            $boards = Board::select('board_name')->where('id', $boardsUnits['board_id'])->get()->pluck('board_name');
             $units = Unity::select('unit_name')->where('id', $boardsUnits['unit_id'])->get()->pluck('unit_name');
             $salesmans = User::select('users.id', 'users.name')
                 ->join('board_unit_users', 'users.id', 'board_unit_users.user_id')
@@ -55,7 +58,7 @@ class SaleRepository
 
         if ($authUser->profile === User::SALESMAN) {
 
-            $boards = Board::select('board_name')->where('id', $boardsUnits['board_id'])->pluck('board_name');
+            $boards = Board::select('board_name')->where('id', $boardsUnits['board_id'])->get()->pluck('board_name');
             $units = Unity::select('unit_name')->where('id', $boardsUnits['unit_id'])->get()->pluck('unit_name');
             $salesmans = User::select('users.id', 'users.name')
                 ->join('board_unit_users', 'users.id', 'board_unit_users.user_id')

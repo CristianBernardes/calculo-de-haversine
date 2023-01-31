@@ -41,7 +41,7 @@ class Sale extends Model
      */
     public function getDateOfSaleAttribute()
     {
-        $sale = $this->find($this->sale_id);
+        $sale = $this->find($this->sale_id ?? $this->id);
 
         return formatDateAndTime($sale->date_hour_sale, 'Y-m-d');
     }
@@ -51,7 +51,7 @@ class Sale extends Model
      */
     public function getHourOfSaleAttribute()
     {
-        $sale = $this->find($this->sale_id);
+        $sale = $this->find($this->sale_id ?? $this->id);
 
         return formatDateAndTime($sale->date_hour_sale, 'H:i');
     }

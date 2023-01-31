@@ -60,7 +60,7 @@ class SaleApiController extends Controller
             return response()->json($this->saleRepository->getSales(Auth::user(), $board, $unit, $salesman, $startEndDate));
         } catch (Exception $e) {
 
-            return response()->json(['error' => $e->getMessage()], $e->getCode());
+            return response()->json(['error' => $e->getMessage()], $e->getCode() === 0 ? 400 : $e->getCode());
         }
     }
 
@@ -75,7 +75,7 @@ class SaleApiController extends Controller
             return response()->json($this->saleRepository->getSale(Auth::user(), $saleId));
         } catch (Exception $e) {
 
-            return response()->json(['error' => $e->getMessage()], $e->getCode());
+            return response()->json(['error' => $e->getMessage()], $e->getCode() === 0 ? 400 : $e->getCode());
         }
     }
 
@@ -89,7 +89,7 @@ class SaleApiController extends Controller
             return response()->json($this->saleRepository->insertSale(Auth::user(), $request->all()));
         } catch (Exception $e) {
 
-            return response()->json(['error' => $e->getMessage()], $e->getCode());
+            return response()->json(['error' => $e->getMessage()], $e->getCode() === 0 ? 400 : $e->getCode());
         }
     }
 }
