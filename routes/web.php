@@ -14,7 +14,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return response()->json([
+        'success' => 'The api is alive, you can test its functionality',
+        'api_docs' => url()->current() . '/documentation'
+    ]);
 });
 
 Route::get('/documentation', function () {

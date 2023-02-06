@@ -213,7 +213,7 @@ class SaleRepository
         $sale->date_hour_sale = Carbon::now();
         $sale->save();
 
-        return $sale;
+        return $this->querySale()->where('sales.id', $sale->id)->first();
     }
 
     /**
