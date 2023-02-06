@@ -29,3 +29,11 @@ Route::group(['middleware' => 'api'], function () {
         Route::post('insert-sale', [SaleApiController::class, 'insertSale']);
     });
 });
+
+Route::any('{path}', function () {
+    return response()->json([
+        "error" => true,
+        'message' => 'Route not found',
+        'response' => ['Route not found']
+    ], 404);
+})->where('path', '.*');
