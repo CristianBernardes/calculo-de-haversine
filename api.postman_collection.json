@@ -27,7 +27,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"afonso.afancar@magazineaziul.com.br\",\n    \"password\":\"mudar123\"\n}"
+							"raw": "{\n    \"email\": \"pele@magazineaziul.com.br\",\n    \"password\":\"mudar123\"\n}"
 						},
 						"url": {
 							"raw": "{{url}}auth/login",
@@ -37,7 +37,8 @@
 							"path": [
 								"login"
 							]
-						}
+						},
+						"description": "Só são aceitos usuários que estejam cadastrados na base de dados, caso contrario, não é possível logar."
 					},
 					"response": [
 						{
@@ -61,15 +62,11 @@
 									"raw": "{\n    \"email\": \"pele@magazineaziul.com.br\",\n    \"password\":\"mudar123\"\n}"
 								},
 								"url": {
-									"raw": "http://desafio.test/api/auth/login",
-									"protocol": "http",
+									"raw": "{{url}}auth/login",
 									"host": [
-										"desafio",
-										"test"
+										"{{url}}auth"
 									],
 									"path": [
-										"api",
-										"auth",
 										"login"
 									]
 								}
@@ -240,7 +237,8 @@
 							"path": [
 								"refresh"
 							]
-						}
+						},
+						"description": "É necessário estar logado para recuperar um novo token. Este procedimento invalida o token anterior."
 					},
 					"response": [
 						{
@@ -431,7 +429,8 @@
 							"path": [
 								"me"
 							]
-						}
+						},
+						"description": "Retorna informações do usuário logado"
 					},
 					"response": [
 						{
@@ -550,14 +549,15 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"board\": \"Sudeste\",\n    \"salesman\": \"Luiz Felipe\",\n    \"unit\": \"Belo Horizonte\",\n    \"start_date\": \"2023-01-01\",\n    \"end_date\": \"2023-01-19\"\n}"
+							"raw": ""
 						},
 						"url": {
 							"raw": "{{url}}sales",
 							"host": [
 								"{{url}}sales"
 							]
-						}
+						},
+						"description": "Você pode enviar os seguintes parâmetros:\n\n**\"board\":** Diretoria a ser pesquisada,  \n**\"salesman\":** Nome do Vendedor,  \n**\"unit\":** Unidade,  \n**\"start_date\":** Data de inicio no formato \"2023-01-01\",  \n**\"end_date\":** Data de fim no formato \"2023-01-19\"\n\nExemplo:  \n`{   \"board\": \"Sudeste\",   \"salesman\": \"Luiz Felipe\",   \"unit\": \"Belo Horizonte\",   \"start_date\": \"2023-01-01\",   \"end_date\": \"2023-01-19\"   }`"
 					},
 					"response": [
 						{
@@ -1171,6 +1171,202 @@
 					]
 				},
 				{
+					"name": "Consult a single sale",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "X-Requested-With",
+								"value": "XMLHttpRequest",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}sale/3387143e-7e50-406c-9218-9eb8f3bfd909",
+							"host": [
+								"{{url}}sale"
+							],
+							"path": [
+								"3387143e-7e50-406c-9218-9eb8f3bfd909"
+							]
+						},
+						"description": "É necessário passar um id valido para consultar uma venda.  \nSe um vendedor, gerente, ou Diretor consultar uma venda que não seja pertencente às suas demandas, é retornado um erro 404 informando que a venda não foi encontrada. o Diretor Geral pode consultar qualquer venda, desde que ela exista!"
+					},
+					"response": [
+						{
+							"name": "Consult a single sale Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "X-Requested-With",
+										"value": "XMLHttpRequest",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{url}}sale/3387143e-7e50-406c-9218-9eb8f3bfd909",
+									"host": [
+										"{{url}}sale"
+									],
+									"path": [
+										"3387143e-7e50-406c-9218-9eb8f3bfd909"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Fri, 20 Jan 2023 01:51:46 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "Apache/2.4.52 (Ubuntu)"
+								},
+								{
+									"key": "Vary",
+									"value": "Authorization"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "59"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100"
+								},
+								{
+									"key": "Connection",
+									"value": "Keep-Alive"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"sale_id\": \"3387143e-7e50-406c-9218-9eb8f3bfd909\",\n    \"sale_value\": 1500,\n    \"salesman\": \"Afonso Afancar\",\n    \"unit\": \"Belo Horizonte\",\n    \"board\": \"Sudeste\",\n    \"latitude\": \"-21.55139\",\n    \"longitude\": \"-45.43028\",\n    \"roaming\": 0,\n    \"date_of_sale\": \"2023-01-19\",\n    \"hour_of_sale\": \"22:51\"\n}"
+						},
+						{
+							"name": "Sale not found",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "X-Requested-With",
+										"value": "XMLHttpRequest",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{url}}sale/3387143e-7e50-406c-9218-9eb8f3bfd904",
+									"host": [
+										"{{url}}sale"
+									],
+									"path": [
+										"3387143e-7e50-406c-9218-9eb8f3bfd904"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Fri, 20 Jan 2023 01:52:06 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "Apache/2.4.52 (Ubuntu)"
+								},
+								{
+									"key": "Vary",
+									"value": "Authorization"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "58"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100"
+								},
+								{
+									"key": "Connection",
+									"value": "Keep-Alive"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": \"Sale not found\"\n}"
+						}
+					]
+				},
+				{
 					"name": "Insert Sale",
 					"request": {
 						"auth": {
@@ -1198,14 +1394,15 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"latitude\": \"-25.473704465731746\",\n    \"longitude\": \"-49.24787198992874\",\n    \"sale_value\": 80500.44\n}"
+							"raw": "{\n    \"latitude\": \"-25.473704465731746\",\n    \"longitude\": \"-49.24787198992874\",\n    \"sale_value\": 8500.44\n}"
 						},
 						"url": {
 							"raw": "{{url}}insert-sale",
 							"host": [
 								"{{url}}insert-sale"
 							]
-						}
+						},
+						"description": "Os atributos latitude, longitude e sale_value são atributos obrigatórios a requisição, os demais são gerados com base no usuário que efetuou a venda. Detalhe: Somente vendedores estão autorizados a realizar uma venda."
 					},
 					"response": [
 						{
@@ -1443,202 +1640,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"user_id\": \"5dadc259-c362-4e5f-8c68-95099b782b10\",\n    \"unit_name\": \"Curitiba\",\n    \"latitude\": \"-25.473704465731746\",\n    \"longitude\": \"-49.24787198992874\",\n    \"sale_value\": 80500.44,\n    \"roaming\": 1,\n    \"date_hour_sale\": \"2023-01-20T01:51:23.065415Z\",\n    \"id\": \"e0b839d9-e666-4bca-8a18-46ba4859cf51\",\n    \"updated_at\": \"2023-01-20T01:51:23.000000Z\",\n    \"created_at\": \"2023-01-20T01:51:23.000000Z\",\n    \"date_of_sale\": \"2023-01-19\",\n    \"hour_of_sale\": \"22:51\"\n}"
-						}
-					]
-				},
-				{
-					"name": "Consult a single sale",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "X-Requested-With",
-								"value": "XMLHttpRequest",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{url}}sale/3387143e-7e50-406c-9218-9eb8f3bfd909",
-							"host": [
-								"{{url}}sale"
-							],
-							"path": [
-								"3387143e-7e50-406c-9218-9eb8f3bfd909"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "Consult a single sale Success",
-							"originalRequest": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									},
-									{
-										"key": "X-Requested-With",
-										"value": "XMLHttpRequest",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "{{url}}sale/3387143e-7e50-406c-9218-9eb8f3bfd909",
-									"host": [
-										"{{url}}sale"
-									],
-									"path": [
-										"3387143e-7e50-406c-9218-9eb8f3bfd909"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Date",
-									"value": "Fri, 20 Jan 2023 01:51:46 GMT"
-								},
-								{
-									"key": "Server",
-									"value": "Apache/2.4.52 (Ubuntu)"
-								},
-								{
-									"key": "Vary",
-									"value": "Authorization"
-								},
-								{
-									"key": "Cache-Control",
-									"value": "no-cache, private"
-								},
-								{
-									"key": "X-RateLimit-Limit",
-									"value": "60"
-								},
-								{
-									"key": "X-RateLimit-Remaining",
-									"value": "59"
-								},
-								{
-									"key": "Access-Control-Allow-Origin",
-									"value": "*"
-								},
-								{
-									"key": "Keep-Alive",
-									"value": "timeout=5, max=100"
-								},
-								{
-									"key": "Connection",
-									"value": "Keep-Alive"
-								},
-								{
-									"key": "Transfer-Encoding",
-									"value": "chunked"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"sale_id\": \"3387143e-7e50-406c-9218-9eb8f3bfd909\",\n    \"sale_value\": 1500,\n    \"salesman\": \"Afonso Afancar\",\n    \"unit\": \"Belo Horizonte\",\n    \"board\": \"Sudeste\",\n    \"latitude\": \"-21.55139\",\n    \"longitude\": \"-45.43028\",\n    \"roaming\": 0,\n    \"date_of_sale\": \"2023-01-19\",\n    \"hour_of_sale\": \"22:51\"\n}"
-						},
-						{
-							"name": "Sale not found",
-							"originalRequest": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									},
-									{
-										"key": "X-Requested-With",
-										"value": "XMLHttpRequest",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "{{url}}sale/3387143e-7e50-406c-9218-9eb8f3bfd904",
-									"host": [
-										"{{url}}sale"
-									],
-									"path": [
-										"3387143e-7e50-406c-9218-9eb8f3bfd904"
-									]
-								}
-							},
-							"status": "Not Found",
-							"code": 404,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Date",
-									"value": "Fri, 20 Jan 2023 01:52:06 GMT"
-								},
-								{
-									"key": "Server",
-									"value": "Apache/2.4.52 (Ubuntu)"
-								},
-								{
-									"key": "Vary",
-									"value": "Authorization"
-								},
-								{
-									"key": "Cache-Control",
-									"value": "no-cache, private"
-								},
-								{
-									"key": "X-RateLimit-Limit",
-									"value": "60"
-								},
-								{
-									"key": "X-RateLimit-Remaining",
-									"value": "58"
-								},
-								{
-									"key": "Access-Control-Allow-Origin",
-									"value": "*"
-								},
-								{
-									"key": "Keep-Alive",
-									"value": "timeout=5, max=100"
-								},
-								{
-									"key": "Connection",
-									"value": "Keep-Alive"
-								},
-								{
-									"key": "Transfer-Encoding",
-									"value": "chunked"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"error\": \"Sale not found\"\n}"
+							"body": "{\n    \"sale_id\": \"81f0b735-7c65-4135-baa5-309f2b89b483\",\n    \"sale_value\": 8500.44,\n    \"salesman\": \"Luiz Fernando\",\n    \"nearest_unit\": \"Sao Paulo\",\n    \"board_salesman\": \"Sul\",\n    \"latitude\": \"-25.473704465731746\",\n    \"longitude\": \"-49.24787198992874\",\n    \"roaming\": 1,\n    \"date_of_sale\": \"2023-02-06\",\n    \"hour_of_sale\": \"15:40\"\n}"
 						}
 					]
 				}
@@ -1668,12 +1670,12 @@
 	"variable": [
 		{
 			"key": "token",
-			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vZGVzYWZpby50ZXN0L2FwaS9hdXRoL2xvZ2luIiwiaWF0IjoxNjc0MDgyNzY3LCJleHAiOjE2NzQwODYzNjcsIm5iZiI6MTY3NDA4Mjc2NywianRpIjoiNEtES2xGUVBhSWVmYkN6NiIsInN1YiI6Ijk4YTA1NDMxLTI3MzctNDdjNy05MjI1LWM1NGEzMzdkOGNlZCIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.dfJD460VwkDQkZVd1ym0XBh-6bcfntLh_akRJx_M04U",
+			"value": "Seu Bearer Token",
 			"type": "string"
 		},
 		{
 			"key": "url",
-			"value": "http://desafio.test/api/",
+			"value": "https://api.testfront.cvti.cloud/api/",
 			"type": "string"
 		}
 	]
