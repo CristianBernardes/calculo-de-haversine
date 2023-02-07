@@ -9,17 +9,17 @@ return [
     /*
      * The HTML <title> for the generated documentation. If this is empty, Scribe will infer it from config('app.name').
      */
-    'title' => null,
+    'title' => 'Api para aplicação de Teste Frontend',
 
     /*
      * A short description of your API. Will be included in the docs webpage, Postman collection and OpenAPI spec.
      */
-    'description' => '',
+    'description' => 'O objetivo geral do sistema é servir como ferramenta de controle regional de vendas, proporcionando uma interface onde os vendedores, através de seus celulares, possam efetuar os lançamentos das vendas. Os gerentes por sua vez, através de seus computadores via navegador, podem acompanhar o desempenho somente de seus vendedores. Os diretores, através de seus computadores via navegador, podem acompanhar o desempenho somente das unidades que pertencem à sua diretoria enquanto o diretor nacional pode acompanhar pelo computador via navegador o desempenho de vendas de todas as unidades e diretorias.',
 
     /*
      * The base URL displayed in the docs. If this is empty, Scribe will use the value of config('app.url').
      */
-    'base_url' => null,
+    'base_url' => env('APP_URL', 'https://api.testfront.cvti.cloud'),
 
     /*
      * Tell Scribe what routes to generate documentation for.
@@ -139,7 +139,7 @@ return [
      * - "static" will generate a static HTMl page in the /public/docs folder,
      * - "laravel" will generate the documentation as a Blade view, so you can add routing and authentication.
      */
-    'type' => 'static',
+    'type' => 'laravel',
 
     /*
      * Settings for `static` type output.
@@ -192,7 +192,7 @@ return [
          * The base URL for the API tester to use (for example, you can set this to your staging URL).
          * Leave as null to use the current app URL (config(app.url)).
          */
-        'base_url' => null,
+        'base_url' => env('APP_URL', 'https://api.testfront.cvti.cloud'),
 
         /**
          * Fetch a CSRF token before each request, and add it as an X-XSRF-TOKEN header. Needed if you're using Laravel Sanctum.
@@ -270,6 +270,7 @@ INTRO,
     'example_languages' => [
         'bash',
         'javascript',
+        'php'
     ],
 
     /*
@@ -356,7 +357,7 @@ INTRO,
      * The format you pass to `date` will be passed to PhP's `date()` function.
      * The format you pass to `git` can be either "short" or "long".
      */
-    'last_updated' => 'Last updated: {date:F j, Y}',
+    'last_updated' => 'Última Atualização: {date:d/m/Y}',
 
     'examples' => [
         /*

@@ -3,6 +3,8 @@
 /public/docs/*
 /public/hot
 /public/storage
+/public/vendor/scribe/*
+/resources/views/scribe/*
 /storage/*.key
 /vendor
 .env
