@@ -16,7 +16,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return response()->json([
         'success' => 'The api is alive, you can test its functionality',
-        'api_docs' => url()->current() . '/documentation'
+        'api_docs' => url()->current() . '/docs',
+        'api_docs_postman' => url()->current() . '/documentation',
     ]);
 });
 
