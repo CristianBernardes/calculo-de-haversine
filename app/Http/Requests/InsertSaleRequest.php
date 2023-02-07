@@ -35,15 +35,18 @@ class InsertSaleRequest extends FormRequest
         return [
             'latitude' => [
                 'description' => 'valor de latitude do lugar onde o vendedor esta',
-                'required' => true
+                'required' => true,
+                'example' => "-25.473704465731746"
             ],
             'longitude' => [
                 'description' => 'valor de longitude do lugar onde o vendedor esta',
-                'required' => true
+                'required' => true,
+                'example' => "-49.24787198992874"
             ],
             'sale_value' => [
                 'description' => 'valor total da venda',
-                'required' => true
+                'required' => true,
+                'example' => 8500.44
             ],
         ];
     }
