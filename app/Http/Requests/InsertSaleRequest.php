@@ -4,6 +4,9 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ *
+ */
 class InsertSaleRequest extends FormRequest
 {
     /**
@@ -30,7 +33,10 @@ class InsertSaleRequest extends FormRequest
         ];
     }
 
-    public function bodyParameters()
+    /**
+     * @return array[]
+     */
+    public function bodyParameters(): array
     {
         return [
             'latitude' => [
