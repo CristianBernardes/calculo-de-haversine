@@ -29,4 +29,22 @@ class InsertSaleRequest extends FormRequest
             'sale_value' => 'required',
         ];
     }
+
+    public function bodyParameters()
+    {
+        return [
+            'latitude' => [
+                'description' => 'valor de latitude do lugar onde o vendedor esta',
+                'required' => true
+            ],
+            'longitude' => [
+                'description' => 'valor de longitude do lugar onde o vendedor esta',
+                'required' => true
+            ],
+            'sale_value' => [
+                'description' => 'valor total da venda',
+                'required' => true
+            ],
+        ];
+    }
 }
