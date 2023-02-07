@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginRequest;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
@@ -23,7 +24,7 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
         $credentials = $request->only(['email', 'password']);
 
@@ -35,6 +36,7 @@ class AuthController extends Controller
     }
 
     /**
+     * @authenticated
      * Get the authenticated User.
      *
      * @return \Illuminate\Http\JsonResponse
@@ -45,6 +47,7 @@ class AuthController extends Controller
     }
 
     /**
+     * @authenticated
      * Refresh a token.
      *
      * @return \Illuminate\Http\JsonResponse

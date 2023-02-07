@@ -30,6 +30,12 @@ class SaleApiController extends Controller
     }
 
     /**
+     * @authenticated
+     * @bodyParam board string. Example: Sudeste
+     * @bodyParam unit string. Example: Belo Horizonte
+     * @bodyParam salesman string. Example: Afonso Afancar
+     * @bodyParam start_date string. Example: 2023-01-01
+     * @bodyParam end_date string. Example: 2023-01-19
      * @param Request $request
      * @return JsonResponse
      */
@@ -65,6 +71,7 @@ class SaleApiController extends Controller
     }
 
     /**
+     * @authenticated
      * @param string $saleId
      * @return JsonResponse
      */
@@ -80,6 +87,7 @@ class SaleApiController extends Controller
     }
 
     /**
+     * @authenticated
      * @param InsertSaleRequest $request
      * @return JsonResponse
      */
