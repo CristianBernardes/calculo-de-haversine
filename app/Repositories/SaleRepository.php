@@ -173,7 +173,7 @@ class SaleRepository
      * @return Sale
      * @throws \Exception
      */
-    public function insertSale($authUser, array $request)
+    public function insertSale($authUser, array $request, bool $calculateHaversine = true)
     {
         if ($authUser->profile != User::SALESMAN) {
             throw new \Exception('Only sellers are allowed to make a sale', 403);
@@ -183,13 +183,13 @@ class SaleRepository
 
         $lon = $request['longitude'];
 
-        $distance = distance($lat, $lon, $authUser->show_seller_coordinates->latitude, $authUser->show_seller_coordinates->longitude);
-
-        $roaming = 0;
+        $roaming = $calculateHaversine ? 0 : $request['roaming'];
 
         $unitName = null;
 
-        if ($distance > 100) {
+        $distance = distance($lat, $lon, $authUser->show_seller_coordinates->latitude, $authUser->show_seller_coordinates->longitude);
+
+        if ($distance > 100 && $calculateHaversine) {
 
             foreach (Unity::select('unit_name', 'latitude', 'longitude')->get() as $unity) {
                 $unityDistance = distance($lat, $lon, $unity->latitude, $unity->longitude);

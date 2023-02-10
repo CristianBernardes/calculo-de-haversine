@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\InsertSaleRequest;
+use App\Http\Requests\InsertSaleRoamingRequest;
 use App\Repositories\SaleRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -95,6 +96,21 @@ class SaleApiController extends Controller
     {
         try {
             return response()->json($this->saleRepository->insertSale(Auth::user(), $request->all()));
+        } catch (Exception $e) {
+
+            return response()->json(['error' => $e->getMessage()], $e->getCode() === 0 ? 400 : $e->getCode());
+        }
+    }
+
+    /**
+     * @authenticated
+     * @param InsertSaleRoamingRequest $request
+     * @return JsonResponse
+     */
+    public function insertSaleRoaming(InsertSaleRoamingRequest $request): JsonResponse
+    {
+        try {
+            return response()->json($this->saleRepository->insertSale(Auth::user(), $request->all(), false));
         } catch (Exception $e) {
 
             return response()->json(['error' => $e->getMessage()], $e->getCode() === 0 ? 400 : $e->getCode());

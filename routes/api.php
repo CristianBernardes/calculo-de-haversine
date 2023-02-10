@@ -27,6 +27,7 @@ Route::group(['middleware' => 'api'], function () {
         Route::get('sales', [SaleApiController::class, 'sales']);
         Route::get('sale/{saleId}', [SaleApiController::class, 'sale']);
         Route::post('insert-sale', [SaleApiController::class, 'insertSale']);
+        Route::post('insert-sale-roaming', [SaleApiController::class, 'insertSaleRoaming']);
     });
 });
 
