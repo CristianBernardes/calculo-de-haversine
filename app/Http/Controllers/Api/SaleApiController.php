@@ -95,6 +95,7 @@ class SaleApiController extends Controller
     public function insertSale(InsertSaleRequest $request): JsonResponse
     {
         try {
+
             return response()->json($this->saleRepository->insertSale(Auth::user(), $request->all()));
         } catch (Exception $e) {
 
@@ -110,6 +111,7 @@ class SaleApiController extends Controller
     public function insertSaleRoaming(InsertSaleRoamingRequest $request): JsonResponse
     {
         try {
+
             return response()->json($this->saleRepository->insertSale(Auth::user(), $request->all(), false));
         } catch (Exception $e) {
 
