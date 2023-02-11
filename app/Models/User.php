@@ -116,7 +116,7 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
-     * @return null
+     * @return null|mixed
      */
     public function getshowSellerCoordinatesAttribute()
     {
