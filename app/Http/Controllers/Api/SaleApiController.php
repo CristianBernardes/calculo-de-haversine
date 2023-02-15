@@ -12,7 +12,9 @@ use Illuminate\Support\Facades\Auth;
 use Exception;
 
 /**
+ * @group Informações sobre vendas
  *
+ * Rotas para obter e realizar vendas de usuários com perfil vendedor e para gerenciamento de usuários com perfil administrativo
  */
 class SaleApiController extends Controller
 {
@@ -31,6 +33,7 @@ class SaleApiController extends Controller
     }
 
     /**
+     * Listar vendas realizadas.
      * @authenticated
      * @bodyParam board string. Example: Sudeste
      * @bodyParam unit string. Example: Belo Horizonte
@@ -72,6 +75,7 @@ class SaleApiController extends Controller
     }
 
     /**
+     * Listar informação de uma venda especifica
      * @authenticated
      * @param string $saleId
      * @return JsonResponse
@@ -88,6 +92,7 @@ class SaleApiController extends Controller
     }
 
     /**
+     * Inserir uma nova venda com roaming calculado
      * @authenticated
      * @param InsertSaleRequest $request
      * @return JsonResponse
@@ -104,6 +109,7 @@ class SaleApiController extends Controller
     }
 
     /**
+     * Inserir uma nova venda sem roaming calculado
      * @authenticated
      * @param InsertSaleRoamingRequest $request
      * @return JsonResponse

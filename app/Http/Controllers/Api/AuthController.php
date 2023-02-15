@@ -5,6 +5,11 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 
+/**
+ * @group Autenticação de Usuários
+ *
+ * Rotas para autenticar usuários e obter informações do usuário logado
+ */
 class AuthController extends Controller
 {
     /**
@@ -19,7 +24,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Get a JWT via given credentials.
+     * Obter Token.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -35,8 +40,8 @@ class AuthController extends Controller
     }
 
     /**
+     * Informações do usuário logado.
      * @authenticated
-     * Get the authenticated User.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -46,8 +51,8 @@ class AuthController extends Controller
     }
 
     /**
+     * Atualizar token.
      * @authenticated
-     * Refresh a token.
      *
      * @return \Illuminate\Http\JsonResponse
      */

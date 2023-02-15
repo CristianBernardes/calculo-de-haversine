@@ -31,6 +31,9 @@ Route::group(['middleware' => 'api'], function () {
     });
 });
 
+/**
+ * @hideFromAPIDocumentation
+ */
 Route::any('{path}', function () {
     return response()->json([
         "error" => true,
