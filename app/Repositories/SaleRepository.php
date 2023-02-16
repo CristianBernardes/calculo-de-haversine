@@ -29,41 +29,44 @@ class SaleRepository
     {
         $boardsUnits = $authUser->board_unit;
 
-        if ($authUser->profile === User::GENERAL_MANAGER) {
+        $boards = $units = $salesmans = collect();
 
-            $boards = Board::select('board_name')->get()->pluck('board_name');
-            $units = Unity::select('unit_name')->get()->pluck('unit_name');
-            $salesmans = User::select('id', 'name')->get();
-        }
+        switch ($authUser->profile) {
+            case User::GENERAL_MANAGER:
+                $boards = Board::select('board_name')->get()->pluck('board_name');
+                $units = Unity::select('unit_name')->get()->pluck('unit_name');
+                $salesmans = User::select('id', 'name')->get();
+                break;
 
-        if ($authUser->profile === User::DIRECTOR) {
+            case User::DIRECTOR:
+                $boards = Board::select('board_name')->where('id', $boardsUnits['board_id'])->get()->pluck('board_name');
+                $units = Unity::select('unit_name')->where('board_id', $boardsUnits['board_id'])->get()->pluck('unit_name');
+                $salesmans = User::select('users.id', 'users.name')
+                    ->join('board_unit_users', 'users.id', 'board_unit_users.user_id')
+                    ->where('board_id', $boardsUnits['board_id'])
+                    ->get();
+                break;
 
-            $boards = Board::select('board_name')->where('id', $boardsUnits['board_id'])->get()->pluck('board_name');
-            $units = Unity::select('unit_name')->where('board_id', $boardsUnits['board_id'])->get()->pluck('unit_name');
-            $salesmans = User::select('users.id', 'users.name')
-                ->join('board_unit_users', 'users.id', 'board_unit_users.user_id')
-                ->where('board_id', $boardsUnits['board_id'])
-                ->get();
-        }
+            case User::MANAGER:
+                $boards = Board::select('board_name')->where('id', $boardsUnits['board_id'])->get()->pluck('board_name');
+                $units = Unity::select('unit_name')->where('id', $boardsUnits['unit_id'])->get()->pluck('unit_name');
+                $salesmans = User::select('users.id', 'users.name')
+                    ->join('board_unit_users', 'users.id', 'board_unit_users.user_id')
+                    ->where('unit_id', $boardsUnits['unit_id'])
+                    ->get();
+                break;
 
-        if ($authUser->profile === User::MANAGER) {
+            case User::SALESMAN:
+                $boards = Board::select('board_name')->where('id', $boardsUnits['board_id'])->get()->pluck('board_name');
+                $units = Unity::select('unit_name')->where('id', $boardsUnits['unit_id'])->get()->pluck('unit_name');
+                $salesmans = User::select('users.id', 'users.name')
+                    ->join('board_unit_users', 'users.id', 'board_unit_users.user_id')
+                    ->where('user_id', $authUser->id)
+                    ->get();
+                break;
 
-            $boards = Board::select('board_name')->where('id', $boardsUnits['board_id'])->get()->pluck('board_name');
-            $units = Unity::select('unit_name')->where('id', $boardsUnits['unit_id'])->get()->pluck('unit_name');
-            $salesmans = User::select('users.id', 'users.name')
-                ->join('board_unit_users', 'users.id', 'board_unit_users.user_id')
-                ->where('unit_id', $boardsUnits['unit_id'])
-                ->get();
-        }
-
-        if ($authUser->profile === User::SALESMAN) {
-
-            $boards = Board::select('board_name')->where('id', $boardsUnits['board_id'])->get()->pluck('board_name');
-            $units = Unity::select('unit_name')->where('id', $boardsUnits['unit_id'])->get()->pluck('unit_name');
-            $salesmans = User::select('users.id', 'users.name')
-                ->join('board_unit_users', 'users.id', 'board_unit_users.user_id')
-                ->where('user_id', $authUser->id)
-                ->get();
+            default:
+                break;
         }
 
         /** @var TYPE_NAME $aggregatedQuery */
@@ -96,24 +99,33 @@ class SaleRepository
      */
     public function getSale($authUser, string $saleId)
     {
-        $sale = $this->querySale()->where('sales.id', $saleId)->first();
-
         $boardsUnits = $authUser->board_unit;
 
-        if ($authUser->profile === User::DIRECTOR) {
-            $sale = $this->querySale()->where('boards.id', $boardsUnits['board_id'])->where('sales.id', $saleId)->first();
+        $query = $this->querySale();
+
+        switch ($authUser->profile) {
+
+            case User::GENERAL_MANAGER:
+                break;
+
+            case User::DIRECTOR:
+                $query->where('boards.id', $boardsUnits['board_id']);
+                break;
+
+            case User::MANAGER:
+                $query->where('boards.id', $boardsUnits['board_id'])
+                    ->where('units.id', $boardsUnits['unit_id']);
+                break;
+
+            case User::SALESMAN:
+                $query->where('users.id', $authUser->id);
+                break;
+
+            default:
+                throw new \Exception('Invalid user profile', 403);
         }
 
-        if ($authUser->profile === User::MANAGER) {
-            $sale = $this->querySale()
-                ->where('boards.id', $boardsUnits['board_id'])
-                ->where('units.id', $boardsUnits['unit_id'])
-                ->where('sales.id', $saleId)->first();
-        }
-
-        if ($authUser->profile === User::SALESMAN) {
-            $sale = $this->querySale()->where('users.id', $authUser->id)->where('sales.id', $saleId)->first();
-        }
+        $sale = $query->where('sales.id', $saleId)->first();
 
         if (!$sale) {
             throw new \Exception('Sale not found', 404);
@@ -179,20 +191,18 @@ class SaleRepository
             throw new \Exception('Only sellers are allowed to make a sale', 403);
         }
 
-        $lat = $request['latitude'];
-
-        $lon = $request['longitude'];
-
+        $latitude = $request['latitude'];
+        $longitude = $request['longitude'];
+        $unitName = null;
         $roaming = $calculateHaversine ? 0 : $request['roaming'];
 
-        $unitName = null;
-
-        $distance = distance($lat, $lon, $authUser->show_seller_coordinates->latitude, $authUser->show_seller_coordinates->longitude);
+        $distance = distance($latitude, $longitude, $authUser->show_seller_coordinates->latitude, $authUser->show_seller_coordinates->longitude);
 
         if ($distance > 100 && $calculateHaversine) {
+            $relevantUnits = Unity::select('unit_name', 'latitude', 'longitude')->where('board_id', $authUser->board_unit['board_id'])->get();
 
-            foreach (Unity::select('unit_name', 'latitude', 'longitude')->get() as $unity) {
-                $unityDistance = distance($lat, $lon, $unity->latitude, $unity->longitude);
+            foreach ($relevantUnits as $unity) {
+                $unityDistance = distance($latitude, $longitude, $unity->latitude, $unity->longitude);
 
                 if ($distance > $unityDistance) {
                     $roaming = 1;
@@ -205,9 +215,8 @@ class SaleRepository
         $sale = new Sale();
         $sale->user_id = $authUser->id;
         $sale->unit_name = $unitName;
-        $sale->unit_name = $unitName;
-        $sale->latitude = $lat;
-        $sale->longitude = $lon;
+        $sale->latitude = $latitude;
+        $sale->longitude = $longitude;
         $sale->sale_value = $request['sale_value'];
         $sale->roaming = $roaming;
         $sale->date_hour_sale = Carbon::now();
