@@ -135,6 +135,49 @@ class SaleRepository
     }
 
     /**
+     * @param $authUser
+     * @param array $request
+     * @return Sale
+     * @throws \Exception
+     */
+    public function insertSale($authUser, array $request, bool $calculateHaversine = true)
+    {
+        if ($authUser->profile != User::SALESMAN) {
+            throw new \Exception('Only sellers are allowed to make a sale', 403);
+        }
+
+        $latitude = $request['latitude'];
+        $longitude = $request['longitude'];
+        $unitName = null;
+        $roaming = $calculateHaversine ? 0 : $request['roaming'];
+
+        $distance = distance($latitude, $longitude, $authUser->show_seller_coordinates->latitude, $authUser->show_seller_coordinates->longitude);
+
+        if ($distance > 100 && $calculateHaversine) {
+            $relevantUnits = Unity::select('id', 'unit_name', 'latitude', 'longitude')->get();
+
+            $closestUnit = $this->findClosestUnit($latitude, $longitude, $relevantUnits);
+
+            if ($closestUnit !== null && $closestUnit->id != $authUser->board_unit->unit_id) {
+                $roaming = 1;
+                $unitName = $closestUnit->unit_name;
+            }
+        }
+
+        $sale = new Sale();
+        $sale->user_id = $authUser->id;
+        $sale->unit_name = $unitName;
+        $sale->latitude = $latitude;
+        $sale->longitude = $longitude;
+        $sale->sale_value = $request['sale_value'];
+        $sale->roaming = $roaming;
+        $sale->date_hour_sale = Carbon::now();
+        $sale->save();
+
+        return $this->querySale()->where('sales.id', $sale->id)->first();
+    }
+
+    /**
      * @param $usersId
      * @param $board
      * @param $unit
@@ -177,49 +220,6 @@ class SaleRepository
             })->when($startEndDate, function ($q, $startEndDate) {
                 $q->whereBetween('sales.date_hour_sale', $startEndDate);
             });
-    }
-
-    /**
-     * @param $authUser
-     * @param array $request
-     * @return Sale
-     * @throws \Exception
-     */
-    public function insertSale($authUser, array $request, bool $calculateHaversine = true)
-    {
-        if ($authUser->profile != User::SALESMAN) {
-            throw new \Exception('Only sellers are allowed to make a sale', 403);
-        }
-
-        $latitude = $request['latitude'];
-        $longitude = $request['longitude'];
-        $unitName = null;
-        $roaming = $calculateHaversine ? 0 : $request['roaming'];
-
-        $distance = distance($latitude, $longitude, $authUser->show_seller_coordinates->latitude, $authUser->show_seller_coordinates->longitude);
-
-        if ($distance > 100 && $calculateHaversine) {
-            $relevantUnits = Unity::select('id', 'unit_name', 'latitude', 'longitude')->get();
-
-            $closestUnit = $this->findClosestUnit($latitude, $longitude, $relevantUnits);
-
-            if ($closestUnit !== null && $closestUnit->id != $authUser->board_unit->unit_id) {
-                $roaming = 1;
-                $unitName = $closestUnit->unit_name;
-            }
-        }
-
-        $sale = new Sale();
-        $sale->user_id = $authUser->id;
-        $sale->unit_name = $unitName;
-        $sale->latitude = $latitude;
-        $sale->longitude = $longitude;
-        $sale->sale_value = $request['sale_value'];
-        $sale->roaming = $roaming;
-        $sale->date_hour_sale = Carbon::now();
-        $sale->save();
-
-        return $this->querySale()->where('sales.id', $sale->id)->first();
     }
 
     /**
