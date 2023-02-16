@@ -236,6 +236,13 @@ class SaleRepository
             ->sum("subquery.$value");
     }
 
+    /**
+     * @param $latitude
+     * @param $longitude
+     * @param $relevantUnits
+     * @param $minDistance
+     * @return mixed|null
+     */
     private function findClosestUnit($latitude, $longitude, $relevantUnits, $minDistance = null)
     {
         $minUnit = null;
