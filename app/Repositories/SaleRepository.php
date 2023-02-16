@@ -199,9 +199,9 @@ class SaleRepository
         $distance = distance($latitude, $longitude, $authUser->show_seller_coordinates->latitude, $authUser->show_seller_coordinates->longitude);
 
         if ($distance > 100 && $calculateHaversine) {
-            $relevantUnits = Unity::select('unit_name', 'latitude', 'longitude')->where('board_id', $authUser->board_unit['board_id'])->get();
+            $relevantUnits = Unity::select('unit_name', 'latitude', 'longitude')->get();
 
-            foreach ($relevantUnits as $unity) {
+            foreach (Unity::select('unit_name', 'latitude', 'longitude')->get() as $unity) {
                 $unityDistance = distance($latitude, $longitude, $unity->latitude, $unity->longitude);
 
                 if ($distance > $unityDistance) {
