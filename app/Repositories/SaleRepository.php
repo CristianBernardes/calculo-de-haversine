@@ -203,7 +203,7 @@ class SaleRepository
 
             $closestUnit = $this->findClosestUnit($latitude, $longitude, $relevantUnits);
 
-            if ($closestUnit !== null) {
+            if ($closestUnit !== null && $closestUnit->id !== $authUser->board_unit->unit_id) {
                 $roaming = 1;
                 $unitName = $closestUnit->unit_name;
             }
