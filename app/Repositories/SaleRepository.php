@@ -191,18 +191,20 @@ class SaleRepository
             throw new \Exception('Only sellers are allowed to make a sale', 403);
         }
 
-        $latitude = $request['latitude'];
-        $longitude = $request['longitude'];
-        $unitName = null;
+        $lat = $request['latitude'];
+
+        $lon = $request['longitude'];
+
         $roaming = $calculateHaversine ? 0 : $request['roaming'];
 
-        $distance = distance($latitude, $longitude, $authUser->show_seller_coordinates->latitude, $authUser->show_seller_coordinates->longitude);
+        $unitName = null;
+
+        $distance = distance($lat, $lon, $authUser->show_seller_coordinates->latitude, $authUser->show_seller_coordinates->longitude);
 
         if ($distance > 100 && $calculateHaversine) {
-            $relevantUnits = Unity::select('unit_name', 'latitude', 'longitude')->get();
 
             foreach (Unity::select('unit_name', 'latitude', 'longitude')->get() as $unity) {
-                $unityDistance = distance($latitude, $longitude, $unity->latitude, $unity->longitude);
+                $unityDistance = distance($lat, $lon, $unity->latitude, $unity->longitude);
 
                 if ($distance > $unityDistance) {
                     $roaming = 1;
@@ -215,8 +217,8 @@ class SaleRepository
         $sale = new Sale();
         $sale->user_id = $authUser->id;
         $sale->unit_name = $unitName;
-        $sale->latitude = $latitude;
-        $sale->longitude = $longitude;
+        $sale->latitude = $lat;
+        $sale->longitude = $lon;
         $sale->sale_value = $request['sale_value'];
         $sale->roaming = $roaming;
         $sale->date_hour_sale = Carbon::now();
