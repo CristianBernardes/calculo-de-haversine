@@ -142,7 +142,7 @@ class SaleRepository
      * @param $startEndDate
      * @return mixed
      */
-    public function querySale(
+    private function querySale(
         $usersId = null,
         $board = null,
         $unit = null,
@@ -191,34 +191,29 @@ class SaleRepository
             throw new \Exception('Only sellers are allowed to make a sale', 403);
         }
 
-        $lat = $request['latitude'];
-
-        $lon = $request['longitude'];
-
+        $latitude = $request['latitude'];
+        $longitude = $request['longitude'];
+        $unitName = null;
         $roaming = $calculateHaversine ? 0 : $request['roaming'];
 
-        $unitName = null;
-
-        $distance = distance($lat, $lon, $authUser->show_seller_coordinates->latitude, $authUser->show_seller_coordinates->longitude);
+        $distance = distance($latitude, $longitude, $authUser->show_seller_coordinates->latitude, $authUser->show_seller_coordinates->longitude);
 
         if ($distance > 100 && $calculateHaversine) {
+            $relevantUnits = Unity::select('unit_name', 'latitude', 'longitude')->get();
 
-            foreach (Unity::select('unit_name', 'latitude', 'longitude')->get() as $unity) {
-                $unityDistance = distance($lat, $lon, $unity->latitude, $unity->longitude);
+            $closestUnit = $this->findClosestUnit($latitude, $longitude, $relevantUnits);
 
-                if ($distance > $unityDistance) {
-                    $roaming = 1;
-                    $unitName = $unity->unit_name;
-                    break;
-                }
+            if ($closestUnit !== null) {
+                $roaming = 1;
+                $unitName = $closestUnit->unit_name;
             }
         }
 
         $sale = new Sale();
         $sale->user_id = $authUser->id;
         $sale->unit_name = $unitName;
-        $sale->latitude = $lat;
-        $sale->longitude = $lon;
+        $sale->latitude = $latitude;
+        $sale->longitude = $longitude;
         $sale->sale_value = $request['sale_value'];
         $sale->roaming = $roaming;
         $sale->date_hour_sale = Carbon::now();
@@ -232,12 +227,28 @@ class SaleRepository
      * @param $value
      * @return int|mixed
      */
-    public function aggregatedQuery($subQuery, $value)
+    private function aggregatedQuery($subQuery, $value)
     {
         $subquerySql = $subQuery->toSql();
 
         return DB::table(DB::raw("($subquerySql) as subquery"))
             ->mergeBindings($subQuery->getQuery())
             ->sum("subquery.$value");
+    }
+
+    private function findClosestUnit($latitude, $longitude, $relevantUnits, $minDistance = null)
+    {
+        $minUnit = null;
+
+        foreach ($relevantUnits as $unit) {
+            $distance = distance($latitude, $longitude, $unit->latitude, $unit->longitude);
+
+            if ($minDistance === null || $distance < $minDistance) {
+                $minUnit = $unit;
+                $minDistance = $distance;
+            }
+        }
+
+        return $minUnit;
     }
 }
