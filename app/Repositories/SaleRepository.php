@@ -154,11 +154,13 @@ class SaleRepository
         $distance = distance($latitude, $longitude, $authUser->show_seller_coordinates->latitude, $authUser->show_seller_coordinates->longitude);
 
         if ($distance > 100 && $calculateHaversine) {
+
             $relevantUnits = Unity::select('id', 'unit_name', 'latitude', 'longitude')->get();
 
             $closestUnit = $this->findClosestUnit($latitude, $longitude, $relevantUnits);
 
             if ($closestUnit !== null && $closestUnit->id != $authUser->board_unit->unit_id) {
+
                 $roaming = 1;
                 $unitName = $closestUnit->unit_name;
             }
