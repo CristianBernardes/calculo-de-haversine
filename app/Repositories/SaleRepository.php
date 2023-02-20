@@ -172,6 +172,7 @@ class SaleRepository
         $sale->latitude = $latitude;
         $sale->longitude = $longitude;
         $sale->sale_value = $request['sale_value'];
+        $sale->ip_address = request()->ip();
         $sale->roaming = $roaming;
         $sale->date_hour_sale = Carbon::now();
         $sale->save();

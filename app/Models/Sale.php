@@ -26,6 +26,7 @@ class Sale extends Model
         'latitude',
         'longitude',
         'sale_value',
+        'ip_address',
         'roaming'
     ];
 
