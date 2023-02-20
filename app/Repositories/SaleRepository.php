@@ -5,6 +5,7 @@
 namespace App\Repositories;
 
 use App\Models\Board;
+use App\Models\LocationSaleInformation;
 use App\Models\Unity;
 use App\Models\Sale;
 use App\Models\User;
@@ -146,6 +147,7 @@ class SaleRepository
             throw new \Exception('Only sellers are allowed to make a sale', 403);
         }
 
+        $requestIp = request()->ip();
         $latitude = $request['latitude'];
         $longitude = $request['longitude'];
         $unitName = null;
@@ -172,12 +174,34 @@ class SaleRepository
         $sale->latitude = $latitude;
         $sale->longitude = $longitude;
         $sale->sale_value = $request['sale_value'];
-        $sale->ip_address = request()->ip();
+        $sale->ip_address = $requestIp;
         $sale->roaming = $roaming;
         $sale->date_hour_sale = Carbon::now();
         $sale->save();
 
+        $this->saleInformation($sale->id, $requestIp);
+
         return $this->querySale()->where('sales.id', $sale->id)->first();
+    }
+
+    /**
+     * @param string $saleId
+     * @param string $requestIp
+     * @return void
+     */
+    private function saleInformation(string $saleId, string $requestIp)
+    {
+        $location = json_decode(file_get_contents("http://ip-api.com/json/{$requestIp}?fields=61439"), true);
+
+        $locationSaleInformation = new LocationSaleInformation();
+        $locationSaleInformation->sale_id = $saleId;
+        $locationSaleInformation->country = $location['country'] ?? null;
+        $locationSaleInformation->region = $location['region'] ?? null;
+        $locationSaleInformation->region_name = $location['regionName'] ?? null;
+        $locationSaleInformation->city = $location['city'] ?? null;
+        $locationSaleInformation->latitude = $location['lat'] ?? null;
+        $locationSaleInformation->longitude = $location['lon'] ?? null;
+        $locationSaleInformation->save();
     }
 
     /**
