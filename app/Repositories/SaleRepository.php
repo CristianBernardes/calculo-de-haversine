@@ -264,6 +264,15 @@ class SaleRepository
     }
 
     /**
+     * Essa função findClosestUnit recebe quatro parâmetros:
+     *
+     *$latitude: um número que representa a latitude de uma posição geográfica;
+     *$longitude: um número que representa a longitude de uma posição geográfica;
+     *$relevantUnits: um array de objetos que contêm informações sobre unidades geográficas;
+     *$minDistance: um número que representa a distância mínima para uma unidade geográfica ser considerada a mais próxima. Se esse parâmetro não for fornecido, será considerado nulo.
+     *O objetivo dessa função é encontrar a unidade geográfica mais próxima da posição geográfica informada (latitude e longitude). Para fazer isso, a função percorre o array $relevantUnits e calcula a distância entre a posição geográfica informada e a posição geográfica de cada unidade. A distância é calculada por meio de uma chamada à função distance, que deve ser definida em algum lugar do código (não está presente na função fornecida).
+     *A cada iteração do loop, a função verifica se a distância calculada é menor do que a distância mínima ($minDistance). Se $minDistance for nulo ou se a distância atual for menor do que $minDistance, a unidade atual é considerada a mais próxima e a distância atual se torna a nova distância mínima. Ao final do loop, a função retorna a unidade mais próxima encontrada.
+     *
      * @param $latitude
      * @param $longitude
      * @param $relevantUnits
