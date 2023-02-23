@@ -29,7 +29,14 @@ class InsertSaleRoamingRequest extends FormRequest
             'longitude' => 'required',
             'sale_value' => 'required',
             'roaming' => ['required', Rule::in([1, 0])],
-            'date_hour_sale' => 'required',
+            'date_hour_sale' => [
+                'string',
+                function ($attribute, $value, $fail) {
+                    if (!datetimeFormat($attribute, $value, ['Y-m-d H:i:s'])) {
+                        $fail("The $attribute field must be a datetime in the format Y-m-d H:i:s.");
+                    }
+                }
+            ]
         ];
     }
 

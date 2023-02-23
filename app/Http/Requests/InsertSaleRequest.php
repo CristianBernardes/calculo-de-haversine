@@ -30,6 +30,14 @@ class InsertSaleRequest extends FormRequest
             'latitude' => 'required',
             'longitude' => 'required',
             'sale_value' => 'required',
+            'date_hour_sale' => [
+                'string',
+                function ($attribute, $value, $fail) {
+                    if (!datetimeFormat($attribute, $value, ['Y-m-d H:i:s'])) {
+                        $fail("The $attribute field must be a datetime in the format Y-m-d H:i:s.");
+                    }
+                }
+            ]
         ];
     }
 
@@ -53,6 +61,11 @@ class InsertSaleRequest extends FormRequest
                 'description' => 'valor total da venda',
                 'required' => true,
                 'example' => 8500.44
+            ],
+            'date_hour_sale' => [
+                'description' => 'Data e hora da venda feita offline',
+                'required' => false,
+                'example' => '2023-01-01 23:59:59'
             ],
         ];
     }

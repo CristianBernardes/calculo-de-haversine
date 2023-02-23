@@ -151,14 +151,8 @@ class SaleRepository
         $latitude = $request['latitude'];
         $longitude = $request['longitude'];
         $unitName = null;
-        $roaming = 0;
-        $dateHourSale = Carbon::now();
-
-        if (!$calculateHaversine) {
-
-            $roaming = $request['roaming'];
-            $dateHourSale = $request['date_hour_sale'];
-        }
+        $roaming = $request['roaming'] ?? 0;
+        $dateHourSale =  $request['date_hour_sale'] ?? Carbon::now();
 
         $distance = distance(
             $latitude,
