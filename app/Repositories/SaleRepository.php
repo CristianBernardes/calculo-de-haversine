@@ -71,7 +71,7 @@ class SaleRepository
         }
 
         /** @var TYPE_NAME $aggregatedQuery */
-        $aggregatedQuery = fn (string $value) => $this->aggregatedQuery(
+        $aggregatedQuery = fn (string $value, string $youWantToDo) => $this->aggregatedQuery(
             $this->querySale(
                 $salesmans->pluck('id'),
                 $board,
@@ -79,11 +79,13 @@ class SaleRepository
                 $salesman,
                 $startEndDate
             ),
-            $value
+            $value,
+            $youWantToDo
         );
 
         return [
-            'sales_amount' => $aggregatedQuery('sale_value'),
+            'total_sales' => $aggregatedQuery('sale_id', 'count'),
+            'sales_amount' => $aggregatedQuery('sale_value', 'sum'),
             'sales' => $this->querySale($salesmans->pluck('id'), $board, $unit, $salesman, $startEndDate)->get(),
             'menu' => [
                 'boards' => $boards,
@@ -261,16 +263,17 @@ class SaleRepository
 
     /**
      * @param $subQuery
-     * @param $value
-     * @return int|mixed
+     * @param string $value
+     * @param string $youWantToDo
+     * @return mixed
      */
-    private function aggregatedQuery($subQuery, $value)
+    private function aggregatedQuery($subQuery, string $value, string $youWantToDo)
     {
         $subquerySql = $subQuery->toSql();
 
         return DB::table(DB::raw("($subquerySql) as subquery"))
             ->mergeBindings($subQuery->getQuery())
-            ->sum("subquery.$value");
+            ->$youWantToDo("subquery.$value");
     }
 
     /**
