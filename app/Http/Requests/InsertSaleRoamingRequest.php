@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class InsertSaleRoamingRequest extends FormRequest
 {
@@ -27,7 +28,7 @@ class InsertSaleRoamingRequest extends FormRequest
             'latitude' => 'required',
             'longitude' => 'required',
             'sale_value' => 'required',
-            'roaming' => 'required',
+            'roaming' => ['required', Rule::in([1, 0])],
             'date_hour_sale' => 'required',
         ];
     }

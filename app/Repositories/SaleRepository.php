@@ -151,7 +151,6 @@ class SaleRepository
         $latitude = $request['latitude'];
         $longitude = $request['longitude'];
         $unitName = null;
-
         $roaming = 0;
         $dateHourSale = Carbon::now();
 
@@ -161,9 +160,14 @@ class SaleRepository
             $dateHourSale = $request['date_hour_sale'];
         }
 
-        $distance = distance($latitude, $longitude, $authUser->show_seller_coordinates->latitude, $authUser->show_seller_coordinates->longitude);
+        $distance = distance(
+            $latitude,
+            $longitude,
+            $authUser->show_seller_coordinates->latitude,
+            $authUser->show_seller_coordinates->longitude
+        );
 
-        if ($distance > 100 && $calculateHaversine) {
+        if ($distance > 100) {
 
             $relevantUnits = Unity::select('id', 'unit_name', 'latitude', 'longitude')->get();
 
@@ -171,7 +175,11 @@ class SaleRepository
 
             if ($closestUnit !== null && $closestUnit->id != $authUser->board_unit->unit_id) {
 
-                $roaming = 1;
+                if ($calculateHaversine) {
+
+                    $roaming = 1;
+                }
+
                 $unitName = $closestUnit->unit_name;
             }
         }
