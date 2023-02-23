@@ -55,7 +55,7 @@ class InsertSaleRoamingRequest extends FormRequest
                 'example' => 8500.44
             ],
             'roaming' => [
-                'description' => 'Valor se a venda foi feita proxima da unidade do vendedor. Se for proxima o valor é zero e se for proxima a outra unidade o valor deverá ser 1',
+                'description' => 'Valor se a venda foi feita proxima da unidade do vendedor. Se for proxima o valor é 0 (zero) e se for proxima a outra unidade o valor deverá ser 1 (Um)',
                 'required' => true,
                 'example' => 0
             ],
