@@ -252,7 +252,7 @@ class SaleRepository
                 $query->where('boards.board_name', $board);
             })
             ->when($unit, function ($query, $unit) {
-                $query->where('units.unit_name', $unit);
+                $query->havingRaw('nearest_unit IN (?)', [$unit]);
             })
             ->when($salesman, function ($query, $salesman) {
                 $query->where('users.name', $salesman);
