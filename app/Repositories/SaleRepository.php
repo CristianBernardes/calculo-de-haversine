@@ -156,6 +156,7 @@ class SaleRepository
         $dateHourSale = Carbon::now();
 
         if (!$calculateHaversine) {
+
             $roaming = $request['roaming'];
             $dateHourSale = $request['date_hour_sale'];
         }
