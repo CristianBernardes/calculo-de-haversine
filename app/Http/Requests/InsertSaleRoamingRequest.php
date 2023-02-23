@@ -2,11 +2,14 @@
 
 namespace App\Http\Requests;
 
+use App\Http\Requests\Traits\AuxiliaryValidationsTrait;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class InsertSaleRoamingRequest extends FormRequest
 {
+    use AuxiliaryValidationsTrait;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -32,7 +35,7 @@ class InsertSaleRoamingRequest extends FormRequest
             'date_hour_sale' => [
                 'string',
                 function ($attribute, $value, $fail) {
-                    if (!datetimeFormat($attribute, $value, ['Y-m-d H:i:s'])) {
+                    if (!$this->datetimeFormat($value, ['Y-m-d H:i:s'])) {
                         $fail("The $attribute field must be a datetime in the format Y-m-d H:i:s.");
                     }
                 }

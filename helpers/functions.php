@@ -76,14 +76,3 @@ function formatDateAndTime($date, $format = 'd/m/Y')
 {
     return \Carbon\Carbon::parse($date)->format($format);
 }
-
-function datetimeFormat($attribute, $value, $formats)
-{
-    foreach ($formats as $format) {
-        $parsed = date_parse_from_format($format, $value);
-        if ($parsed['error_count'] === 0 && $parsed['warning_count'] === 0) {
-            return true;
-        }
-    }
-    return false;
-}
