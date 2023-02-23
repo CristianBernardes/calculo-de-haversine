@@ -28,6 +28,7 @@ class InsertSaleRoamingRequest extends FormRequest
             'longitude' => 'required',
             'sale_value' => 'required',
             'roaming' => 'required',
+            'date_hour_sale' => 'required',
         ];
     }
 
@@ -48,7 +49,7 @@ class InsertSaleRoamingRequest extends FormRequest
                 'example' => "-49.24787198992874"
             ],
             'sale_value' => [
-                'description' => 'valor total da venda',
+                'description' => 'Valor total da venda',
                 'required' => true,
                 'example' => 8500.44
             ],
@@ -56,6 +57,11 @@ class InsertSaleRoamingRequest extends FormRequest
                 'description' => 'Valor se a venda foi feita proxima da unidade do vendedor. Se for proxima o valor é zero e se for proxima a outra unidade o valor deverá ser 1',
                 'required' => true,
                 'example' => 0
+            ],
+            'date_hour_sale' => [
+                'description' => 'Data e hora da venda feita offline',
+                'required' => true,
+                'example' => '2023-01-01 23:59:59'
             ],
         ];
     }

@@ -151,7 +151,14 @@ class SaleRepository
         $latitude = $request['latitude'];
         $longitude = $request['longitude'];
         $unitName = null;
-        $roaming = $calculateHaversine ? 0 : $request['roaming'];
+
+        $roaming = 0;
+        $dateHourSale = Carbon::now();
+
+        if (!$calculateHaversine) {
+            $roaming = $request['roaming'];
+            $dateHourSale = $request['date_hour_sale'];
+        }
 
         $distance = distance($latitude, $longitude, $authUser->show_seller_coordinates->latitude, $authUser->show_seller_coordinates->longitude);
 
@@ -176,7 +183,7 @@ class SaleRepository
         $sale->sale_value = $request['sale_value'];
         $sale->ip_address = $requestIp;
         $sale->roaming = $roaming;
-        $sale->date_hour_sale = Carbon::now();
+        $sale->date_hour_sale = $dateHourSale;
         $sale->save();
 
         $this->saleInformation($sale->id, $requestIp);
