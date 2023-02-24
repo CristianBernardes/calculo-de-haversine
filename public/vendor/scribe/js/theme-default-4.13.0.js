@@ -1,4 +1,15 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
+
+    clearInputValuesByNames(['board', 'unit', 'salesman', 'start_date', 'end_date']);
+
+    function clearInputValuesByNames(names) {
+        for (let i = 0; i < names.length; i++) {
+            const inputs = document.getElementsByName(names[i]);
+            for (let j = 0; j < inputs.length; j++) {
+                inputs[j].value = '';
+            }
+        }
+    }
     const updateHash = function (id) {
         window.location.hash = `#${id}`;
     };
@@ -29,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
         searchSelector: '*OR',
         searchTag: '#input-search',
         contentTag: '#toc li',
-        didSearch: function(term) {
+        didSearch: function (term) {
             wrapper.classList.toggle('jets-searching', String(term).length > 0)
         },
         // map these accent keys to plain values
