@@ -256,7 +256,8 @@ class SaleRepository
             })
             ->when($salesman, function ($query, $salesman) {
                 $query->where('users.name', $salesman);
-            })->when($startEndDate, function ($q, $startEndDate) {
+            })
+            ->when($startEndDate, function ($q, $startEndDate) {
                 $q->whereBetween('sales.date_hour_sale', $startEndDate);
             });
     }
