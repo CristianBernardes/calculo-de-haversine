@@ -39,7 +39,7 @@ class SaleApiController extends Controller
      * @queryParam unit string. Example: Belo Horizonte
      * @queryParam salesman string. Example: Afonso Afancar
      * @queryParam start_date string. Example: 2023-01-01
-     * @queryParam end_date string. Example: 2023-01-19
+     * @queryParam end_date string. Example: 2023-12-31
      * @param Request $request
      * @return JsonResponse
      */
