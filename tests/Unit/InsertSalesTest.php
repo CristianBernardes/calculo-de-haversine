@@ -23,7 +23,7 @@ class InsertSalesTest extends TestCase
         $result = $saleRepository->insertSale($user, [
             "latitude" => "-25.473704465731746",
             "longitude" => "-49.24787198992874",
-            "sale_value" => 80500.44
+            "sale_value" => 500.44
         ]);
 
         $this->assertFalse($result->roaming === 0);
@@ -33,13 +33,13 @@ class InsertSalesTest extends TestCase
 
     public function testInsertSalesForSpecificRoamingFalseUser()
     {
-        $user = User::where('email', 'marcos.vinicius@magazineaziul.com.br')->first();
+        $user = User::where('email', 'afonso.afancar@magazineaziul.com.br')->first();
 
         $saleRepository = new SaleRepository();
 
         $result = $saleRepository->insertSale($user, [
-            "latitude" => "-22.923447510604802",
-            "longitude" => "-43.23208495438858",
+            "latitude" => "-19.917854829716372",
+            "longitude" => "-43.94089385954766",
             "sale_value" => 800.55
         ]);
 
