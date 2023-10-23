@@ -14,7 +14,6 @@ Docker Compose: https://www.digitalocean.com/community/tutorials/how-to-install-
 # OBSERVAÇÂO
 
 -   Existe um middleware que verifica se um vendedor esta logado por um dispositivo mobile. Esta verificação é um dos requisitos que estavam fora de escopo, mas para fins de teste, se alterar a variavel do seu .env APP_DEBUG=true para APP_DEBUG=false, este middleware passara a funcionar e caso você tente acessar a url de vendas logado com um vendedor, você sera deslogado imediatamente.
--   Todas as variaveis e requisições foram colocadas em inglês, como isso não estava definido nos requisitos, realizei toda a confecção do sistema na linguagem inglês.
 -   Há um arquivo no diretório raiz do projeto que é um export gerado pelo postman, caso queira importar para testes, o arquivo é este:
 
 ```bash
