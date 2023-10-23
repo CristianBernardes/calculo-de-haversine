@@ -1,9 +1,3 @@
-# Desafio Desenvolvedor Web Backend Pleno/Sênior CONVICTI
-
-Este projeto tem como objetivo cumprir
-com todos os requisitos de um sistema de vendas proposto pela empresa
-CONVICTI.
-
 ## Documentação da api
 
 [Link Documentação](https://documenter.getpostman.com/view/2153586/2s8ZDX4NXX)
